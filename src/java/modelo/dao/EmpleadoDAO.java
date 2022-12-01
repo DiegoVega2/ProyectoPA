@@ -24,37 +24,76 @@ public class EmpleadoDAO {
     private PreparedStatement ps;
     private ResultSet rs;
     private String respuesta="";
+    private static final String VALIDAR_US = "SELECT * FROM empleado WHERE User = ? AND Dni = ? ";
 
     /**
      *Método usado para validar si el usuario ingresado esta almacenado en la base de datos, en donde recibe los aprametros del usuario y contraseña, y si encuuentra un registro
      * en la base de datos que tenga estos datos exactamente, retorna un Objeto Empleado con los valores de la fila respectiva, en la tabla empleado
-     * @param user
-     * @param dni
-     * @return
+     * @param item este aporametro es para nombrar al empleado que sera enviado apra su validación
+     * @return Empleado
      */
-    public Empleado validar(String user, String dni){
-        Empleado objEm= new Empleado();
-        String sql="select * from empleado where User=? and Dni=?";
+        public Empleado valSesion(Empleado item) {
+
+        Empleado nn = null;
+        PreparedStatement ps;
+        ResultSet rs = null;
         try {
             con=cn.conexion();
-            System.out.println("Con: "+con);
-            ps=con.prepareStatement(sql);
-            ps.setString(1, user);
-            ps.setString(2, dni);
-            rs=ps.executeQuery();
-            while(rs.next()){
-              System.out.println("holaa: "+rs.getInt("IdEmpleado"));
-              objEm.setId(rs.getInt("IdEmpleado"));
-               objEm.setUser(rs.getString("User"));
-               objEm.setDni(rs.getString("Dni"));
-               objEm.setNombre(rs.getString("Nombres"));          
+            ps = con.prepareStatement(VALIDAR_US);
+            ps.setString(1, item.getUser());
+            ps.setString(2, item.getDni());
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                nn = new Empleado(
+                        rs.getInt("IdEmpleado"),
+                        rs.getString("Dni"),
+                        rs.getString("Nombres"),
+                        rs.getString("Telefono"),
+                        rs.getString("Estado"),
+                        rs.getString("User"));
+                System.out.println("Emp"+nn.toString());
             }
-        } catch (Exception e) {
-            System.out.println("Error validando: "+e.getMessage());
+
+        } catch (SQLException ex) {
+            System.out.println("error al validar Empleado: " + ex.getMessage());
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException ex) {
+                    System.out.println("error al cerrar result: " + ex.getMessage());
+                }
+            }
+            cn.cerrarConexion();
         }
-        System.out.println(objEm.toString());
-        return objEm;
+        return nn;
     }
+    
+    
+//    public Empleado validar(String user, String dni){
+//        Empleado objEm= new Empleado();
+//        String sql="select * from empleado where User=? and Dni=?";
+//        try {
+//            con=cn.conexion();
+//            System.out.println("Con: "+con);
+//            ps=con.prepareStatement(sql);
+//            ps.setString(1, user);
+//            ps.setString(2, dni);
+//            rs=ps.executeQuery();
+//            while(rs.next()){
+//              System.out.println("holaa: "+rs.getInt("IdEmpleado"));
+//              objEm.setId(rs.getInt("IdEmpleado"));
+//               objEm.setUser(rs.getString("User"));
+//               objEm.setDni(rs.getString("Dni"));
+//               objEm.setNombre(rs.getString("Nombres"));          
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error validando: "+e.getMessage());
+//        }
+//        System.out.println(objEm.toString());
+//        return objEm;
+//    }
     
     
     //CRUD

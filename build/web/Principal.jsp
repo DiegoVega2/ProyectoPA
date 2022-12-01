@@ -5,6 +5,15 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+HttpSession sesion = request.getSession();
+System.out.println("holaprincipal");
+System.out.println("sesion:"+sesion.getAttribute("usuario"));
+if (sesion.getAttribute("usuario") == null) {
+        response.sendRedirect("index.jsp");
+        System.out.println("Cerre sesion");
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -50,7 +59,7 @@
     <a class="dropdown-item" href="#">Id: ${usuario.getId()}</a>
     <div class="dropdown-divider"></div>
     <form action="Validar" method="POST">
-    <button name="accion" value="salir" class="dropdown-item btn btn-danger" href="#">Salir</button>
+    <button name="accion" value="Salir" class="dropdown-item btn btn-danger" href="#">Salir</button>
     </form>
   </div>
 </div>

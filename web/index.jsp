@@ -20,7 +20,7 @@
         <div class="container mt-4 col-lg-4">
             <div class="card col-sm-10">
                 <div class="card-body">
-                    <form class="form-sign" action="Validar" method="POST" >
+                    <form class="form-sign" action="Validar?accion=Ingresar" method="POST" >
                         <div class="form-group text-center">
                             <img src="img/login.png" alt="login" height="70" width="170"/>
                             <br><label>Bienvenido!</label>
@@ -33,7 +33,7 @@
                            <label for="txtpass">Contraseña:</label>
                             <input type="password" name="txtpass" class="form-control"> 
                         </div>
-                        <input type="submit" name="accion" value="Ingresar" class="btn btn-outline-dark btn-block">
+                        <input type="submit" name="tbnIngresar" value="Ingresar" class="btn btn-outline-dark btn-block">
                     </form>
                 </div>
             </div>

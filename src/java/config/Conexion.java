@@ -26,4 +26,7 @@ public class Conexion{
         }
         return con;
     }
+    public Connection cerrarConexion(){
+        return this.con=null;
+    }
 }

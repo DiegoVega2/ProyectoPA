@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import modelo.dao.ClienteDAO;
 import modelo.dao.EmpleadoDAO;
 import modelo.dao.ProductoDAO;
@@ -54,13 +55,17 @@ public class Controlador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String menu=request.getParameter("menu");
+        HttpSession session= request.getSession();
+        Empleado emple = (Empleado)session.getAttribute("usuario");
+        if(emple==null){
+            System.out.println("No ha Iniciado Sesion");
+        }else{
+            String menu=request.getParameter("menu");
         String accion=request.getParameter("accion");
         String idempleado1=request.getParameter("idempleado1");
         if((idempleado1!=null)&& (idempleado1!="0")){
           atendio=Integer.parseInt(idempleado1);
         }
-        System.out.println("Hola, soy: "+atendio);
         if(menu.equals("Principal")){
                 request.getRequestDispatcher("Principal.jsp").forward(request, response);          
         }
@@ -353,7 +358,8 @@ public class Controlador extends HttpServlet {
               request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);        
             }
            request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);        
-        }      
+        }  
+        }       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

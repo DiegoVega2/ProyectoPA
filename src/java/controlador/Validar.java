@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import modelo.dao.EmpleadoDAO;
 import modelo.dto.Empleado;
 
@@ -18,9 +19,6 @@ import modelo.dto.Empleado;
  * @author DieguilloPillo
  */
 public class Validar extends HttpServlet {
-    
-    private Empleado objEm = new Empleado();
-    private EmpleadoDAO objEmDAO= new EmpleadoDAO();
     
 
     /**
@@ -34,21 +32,52 @@ public class Validar extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String accion=request.getParameter("accion");//nombre del botón
-        if(accion.equalsIgnoreCase("Ingresar")){//validar si se hizo clic en el boton
-            String user=request.getParameter("txtuser");
-            String pass=request.getParameter("txtpass");
-            objEm=objEmDAO.validar(user, pass);
-            if(objEm.getUser()!=""){
-                request.setAttribute("usuario", objEm);
-             request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);//redireccionar al controlador
-            }else{
+          String accion = request.getParameter("accion");
+        switch (accion) {
+            case "Ingresar":
+                String u = request.getParameter("txtuser");
+                String p = request.getParameter("txtpass");
+                Empleado dto = new Empleado();
+                dto.setUser(u);
+                dto.setDni(p);
+                EmpleadoDAO dao= new EmpleadoDAO();
+                dto=dao.valSesion(dto);
+                if(dto!=null){ //si hay sesion
+                     System.out.println("ok entro a sesion");
+                    HttpSession session = request.getSession();
+                    session.setAttribute("usuario", dto);
+                    request.getRequestDispatcher("Principal.jsp").forward(request, response);//redireccionar
+                }else{
+                     System.out.println("NO Pailas a sesion");
                 request.getRequestDispatcher("index.jsp").forward(request, response);
-            }
-        }else{
-        request.getRequestDispatcher("index.jsp").forward(request, response);//redirecciona a la misma página
-
+                }
+                
+                break;
+            case "Salir":
+                System.out.println("entre a cerrar la sesion1");
+                 HttpSession session = request.getSession();
+                 request.setAttribute("usuario", null);
+                 session.invalidate();
+                 request.getRequestDispatcher("Principal.jsp").forward(request, response);//redireccionar
+                break;
         }
+        
+        
+//        String accion=request.getParameter("accion");//nombre del botón
+//        if(accion.equalsIgnoreCase("Ingresar")){//validar si se hizo clic en el boton
+//            String user=request.getParameter("txtuser");
+//            String pass=request.getParameter("txtpass");
+//            objEm=objEmDAO.validar(user, pass);
+//            if(objEm.getUser()!=""){
+//                request.setAttribute("usuario", objEm);
+//             request.getRequestDispatcher("Controlador?menu=Principal").forward(request, response);//redireccionar al controlador
+//            }else{
+//                request.getRequestDispatcher("index.jsp").forward(request, response);
+//            }
+//        }else{
+//        request.getRequestDispatcher("index.jsp").forward(request, response);//redirecciona a la misma página
+//
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
