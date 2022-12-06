@@ -80,7 +80,7 @@ public class VentaDAO {
            ps.setInt(2, ve.getIdempleado());
            ps.setString(3, ve.getNumserie());
            ps.setString(4, ve.getFecha());
-           ps.setDouble(5, ve.getPrecio());
+           ps.setDouble(5, ve.getMonto());
            ps.setString(6, ve.getEstado());
             ps.executeUpdate();
             respuesta="guardarVenta Exitosa";
@@ -123,7 +123,7 @@ public class VentaDAO {
     public List<Venta> eliminar(int id, List<Venta> lista1){
         this.lista=lista1;
         for (int i = 0; i < lista.size(); i++) {
-                        if(id==lista.get(i).getId()){
+                        if(id==lista.get(i).getItem()){
                             System.out.println("entre al if");
                           lista.remove(lista.get(i));
                         }
@@ -138,11 +138,13 @@ public class VentaDAO {
      * @return 
      */
     public List<Venta> actualizar(int id,int cantidad, List<Venta> lista2){
+        System.out.println("entre a actualiar ventasdao");
         this.lista=lista2;
         for (int i = 0; i < lista.size(); i++) {
-                        if(id==lista.get(i).getId()){
+                        if(id==lista.get(i).getItem()){
                             lista.get(i).setCantidad(cantidad);
                             lista.get(i).setSubtotal(cantidad*(lista.get(i).getPrecio()));
+                            System.out.println(lista.get(i).getSubtotal());
                             break;
                         }
                     }

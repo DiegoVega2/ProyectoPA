@@ -37,7 +37,7 @@
                                 <input type="submit" class="btn-outline-dark" name="accion" value="BuscarCliente"> 
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" name="nombrescliente" value="${objC.getNombres()}" class="form-control" placeholder="Datos Cliente">
+                                <input type="text" name="nombrescliente" value="${objC.getNombres()}" class="form-control" placeholder="Datos Cliente" onlyread>
                             </div>    
                         </div> 
                         <!-- DATOS DEL PRODUCTO -->
@@ -68,6 +68,7 @@
                         <div class="form-group">
                             <div class="col-sm">
                                 <button type="submit" value="Agregar" name="accion" class="btn btn-dark">Agregar</button>
+                                <button type="submit" value="Actualizar" name="accion" class="btn btn-warning">Actualizar</button>
                             </div>
                         </div>
                     </div>
@@ -102,13 +103,13 @@
                                     <td>${list.getIdProducto()}</td>
                                     <td>${list.getDescripcionp()}</td>
                                     <td>${list.getPrecio()}</td>
-                                    <td><input type="number" name="txtcanti" min="1" max="50" class="form-control" value="${list.getCantidad()}"></td>
+                                    <td>${list.getCantidad()}</td>
                                     <td>${list.getSubtotal()}</td>
                                     <td class="d-flex">
-                                        <a class="btn btn-warning" style="margin-right: 0.3vw" href="Controlador?menu=RegistrarVenta&accion=Editar&id=${list.getId()}">
+                                        <a class="btn btn-warning" style="margin-right: 0.3vw" href="Controlador?menu=RegistrarVenta&accion=Editar&idp=${list.getIdProducto()}&iditem=${list.getItem()}">
                                            Editar 
                                         </a>
-                                        <a class="btn btn-danger" href="Controlador?menu=RegistrarVenta&accion=Eliminar&id=${list.getId()}">
+                                        <a class="btn btn-danger" href="Controlador?menu=RegistrarVenta&accion=Eliminar&itemeli=${list.getItem()}">
                                             Eliminar
                                         </a>
                                     </td>

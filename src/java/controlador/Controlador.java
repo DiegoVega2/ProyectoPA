@@ -42,7 +42,7 @@ public class Controlador extends HttpServlet {
      private String descripcion;
      private double precio, subtotal;
      private double totalapagar=0;  
-     private int ide,idc,idp,atendio;
+     private int ide,idc,idp,atendio,iditem,itemeli;
      String numeroserie;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -275,6 +275,7 @@ public class Controlador extends HttpServlet {
                     for (int i = 0; i < lista.size(); i++) {
                         Producto objP = new Producto();
                         int cantidad =lista.get(i).getCantidad(); 
+                        System.out.println("mostrando cantidad de p en geneventa: "+cantidad);
                         int idproducto= lista.get(i).getIdProducto();
                         ProductoDAO objPDAO = new ProductoDAO();
                         objP=objPDAO.buscar(idproducto);
@@ -289,6 +290,7 @@ public class Controlador extends HttpServlet {
                     totalapagar=0;
                     for (int i = 0; i <lista.size(); i++) {                       
                         totalapagar=totalapagar+lista.get(i).getSubtotal();
+                        System.out.println("");
                     }
                     objV.setMonto(totalapagar);
                     objV.setEstado("1");
@@ -317,25 +319,46 @@ public class Controlador extends HttpServlet {
                     objV=new Venta();
                     lista.clear();
                     totalapagar=0;
+                    item=0;
                     request.getRequestDispatcher("RegistrarVenta.jsp").forward(request, response);
                     break;
                 case "Editar":
                     System.out.println("entre a editar");
-                    idv=Integer.parseInt(request.getParameter("id"));
-                    int cantidad=4; 
-                    lista=objVDAO.actualizar(idv, cantidad, lista);
+                    int idproducto;
+                    idproducto=Integer.parseInt(request.getParameter("idp"));
+                    System.out.println("idp: "+idproducto);
+                    iditem=Integer.parseInt(request.getParameter("iditem"));
+                    System.out.println("idv: "+iditem);
+                    objP=objPDAO.listarId(idproducto);
+                    request.setAttribute("producto", objP);
+                    //idv=Integer.parseInt(request.getParameter("id"));
+//                    int cantidad=4; 
+//                    lista=objVDAO.actualizar(idv, cantidad, lista);
+//                    totalapagar=0;
+//                    for (int i = 0; i <lista.size(); i++) {                       
+//                        totalapagar=totalapagar+lista.get(i).getSubtotal();
+//                    }
+//                    request.setAttribute("objC",objC);
+//                    request.setAttribute("nserie", numeroserie);
+//                    request.setAttribute("totalpagar", totalapagar);
+//                    request.setAttribute("lista", lista);
+                    
+                    break;
+                case "Actualizar":
+                    cant=Integer.parseInt(request.getParameter("cant"));
+                    lista=objVDAO.actualizar(iditem, cant, lista);
                     totalapagar=0;
                     for (int i = 0; i <lista.size(); i++) {                       
-                        totalapagar=totalapagar+lista.get(i).getSubtotal();
-                    }
+                       totalapagar=totalapagar+lista.get(i).getSubtotal();
+                   }
                     request.setAttribute("objC",objC);
                     request.setAttribute("nserie", numeroserie);
                     request.setAttribute("totalpagar", totalapagar);
                     request.setAttribute("lista", lista);
                     break;
                 case "Eliminar":
-                    idv=Integer.parseInt(request.getParameter("id"));
-                    lista=objVDAO.eliminar(idv, lista);
+                    itemeli=Integer.parseInt(request.getParameter("itemeli"));
+                    lista=objVDAO.eliminar(itemeli, lista);
                     totalapagar=0;
                     for (int i = 0; i <lista.size(); i++) {                       
                         totalapagar=totalapagar+lista.get(i).getSubtotal();
